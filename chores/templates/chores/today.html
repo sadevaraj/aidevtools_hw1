@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Today</title>
+  </head>
+  <body>
+    <h1>Today dashboard — {{ today }}</h1>
+    <p><a href="{% url 'chores:list' %}">All chores</a></p>
+
+    <h2>Due now</h2>
+    {% if chore_cards %}
+      <ul>
+        {% for card in chore_cards %}
+          <li>
+            <strong>{{ card.chore.name }}</strong>
+            ({{ card.chore.get_recurrence_type_display }})
+            {% if card.status.is_overdue %}<span>OVERDUE</span>{% endif %}
+            {% if card.status.weekly_progress is not None %}
+              — weekly progress: {{ card.status.weekly_progress }}/{{ card.chore.weekly_target }}
+            {% endif %}
+            — streak: {{ card.current_streak }}
+            — completions: {{ card.completion_count }}
+            <form method="post" action="{% url 'chores:complete' card.chore.id %}">
+              {% csrf_token %}
+              {{ completion_form.completed_on }}
+              <input type="hidden" name="next" value="{% url 'chores:today' %}" />
+              <button type="submit">Mark done</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Nothing due right now.</p>
+    {% endif %}
+
+    <h2>Recent completions</h2>
+    {% if recent_completions %}
+      <ul>
+        {% for completion in recent_completions %}
+          <li>
+            {{ completion.chore.name }} — {{ completion.completed_on }}
+            <form method="post" action="{% url 'chores:undo' completion.id %}" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{% url 'chores:today' %}" />
+              <button type="submit">Undo</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No completions yet.</p>
+    {% endif %}
+  </body>
+</html>
