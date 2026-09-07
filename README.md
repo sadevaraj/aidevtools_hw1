@@ -23,15 +23,16 @@ The full specification, including data model and design decisions, is in
 
 ## Tech
 
-Django with the default SQLite database, managed with [uv](https://docs.astral.sh/uv/).
-Runs locally; nothing to deploy and no database server to install.
+Django with the default SQLite database, managed with
+[Poetry](https://python-poetry.org/). The virtual environment is configured as
+an in-project environment at `.venv/`.
 
 ## Getting started
 
 ```bash
-uv sync
-uv run python manage.py migrate
-uv run python manage.py runserver
+poetry install
+poetry run python manage.py migrate
+poetry run python manage.py runserver
 ```
 
 Then open http://127.0.0.1:8000/.
@@ -39,7 +40,7 @@ Then open http://127.0.0.1:8000/.
 ## Tests
 
 ```bash
-uv run python manage.py test
+poetry run python manage.py test
 ```
 
 ## Status
