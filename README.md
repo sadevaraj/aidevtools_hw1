@@ -1,18 +1,17 @@
-# Personal Chore Tracker
+# Shared Chore Tracker (2-Person)
 
 Homework 1 for the [DataTalksClub AI Dev Tools Zoomcamp](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp).
 
 The homework begins with a deliberately vague idea — *"a tool for managing shared
-household chores"* — and asks you to turn it into a specification of your own. A
-brainstorming session narrowed mine to something more personal: a **single-user chore
-tracker** for recurring household and self-care tasks, in the spirit of TickTick.
-
-No housemates, no rotation, no sharing. Just me, my chores, and whether I'm keeping up.
+household chores"* — and asks you to turn it into a specification of your own. This
+project narrows scope to a **2-person shared household chore tracker** with recurring
+tasks, due visibility, and streaks.
 
 ## Features
 
 - **Recurring chores** — daily (e.g. exercise), a flexible weekly target (e.g. "learn
   something 2× this week"), or a one-off task with a due date.
+- **2-person assignment** — each chore is assigned to one of two household members.
 - **In-app reminders** — a Today view showing what's due, with overdue items highlighted.
 - **History and streaks** — current streak and total completion count per chore, with one
   grace period before a streak resets.
@@ -20,6 +19,9 @@ No housemates, no rotation, no sharing. Just me, my chores, and whether I'm keep
 
 The full specification, including data model and design decisions, is in
 [`_docs/plan.md`](_docs/plan.md).
+
+Homework answers are tracked in [`_docs/homework.md`](_docs/homework.md), and
+the implementation task list is in [`backlog.md`](backlog.md).
 
 ## Tech
 

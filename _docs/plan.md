@@ -1,20 +1,16 @@
-# Personal Chore Tracker — Spec & Plan
+# Shared Chore Tracker (2-Person) — Spec & Plan
 
 ## Problem
 
 Homework 1 starts from a deliberately vague idea: *"a tool for managing shared household
-chores."* The brainstorming conversation narrowed it to something quite different from
-where it started — a **single-user personal chore tracker**, TickTick-flavoured. One
-person (me), tracking recurring household and self-care chores, seeing what's due today,
-and getting a sense of how consistent I've been.
-
-No housemates, no rotation, no sharing.
+chores."* This project narrows the scope to a **2-person shared household chore
+tracker**: two members, recurring chores, a due-today view, and streak visibility.
 
 ## Approach
 
 A small Django web app on the default SQLite database. One flat list of chores, each with
-a recurrence rule. The app surfaces what's due, lets me tick things off with one click,
-and tracks streaks.
+an assignee and recurrence rule. The app surfaces what's due, lets either member tick
+things off with one click, and tracks streaks.
 
 ## Settled scope
 
@@ -24,14 +20,16 @@ and tracks streaks.
    - *Daily* — e.g. physical exercise, due every day.
    - *Flexible weekly target* — e.g. "self-learning 2× this week", done on any days.
    - *One-off* — a single task with a due date, no repetition.
-2. **In-app reminders** — a "Today" view listing what's due, with overdue items
+2. **Two household members** — chores are assigned to one of two people, and completions
+   record who did them.
+3. **In-app reminders** — a "Today" view listing what's due, with overdue items
    highlighted. No email, no push, no desktop notifications.
-3. **History & streaks** — current streak and total completion count per chore.
-4. **Quick-add** — type a name, press Enter, chore exists. The TickTick habit.
+4. **History & streaks** — current streak and total completion count per chore.
+5. **Quick-add** — type a name, press Enter, chore exists.
 
 **Out of scope**
 
-- Multiple users, members, household sharing, rotation, assignment
+- More than two users, login/authentication, or multi-household support
 - Categories, tags, priorities, colour coding
 - Notes, links, or descriptions on chores
 - Calendar/month view
@@ -42,7 +40,7 @@ and tracks streaks.
 
 | Question | Decision |
 | --- | --- |
-| Users | Single user, no auth |
+| Users | Exactly 2 household members, no auth |
 | Form factor | Django web app |
 | Grouping | Flat list, no categories |
 | Chore detail | Name only — no notes or links |
@@ -60,15 +58,22 @@ and tracks streaks.
 
 **Chore**
 - `name` — text
+- `assigned_to` — FK to household member
 - `recurrence_type` — `daily` | `weekly_target` | `one_off`
 - `weekly_target` — int, only meaningful when type is `weekly_target`
 - `due_date` — date, only meaningful when type is `one_off`
 - `is_archived` — bool
 - `created_at`
 
+**HouseholdMember**
+- `name` — text
+- `is_active` — bool
+- `created_at`
+
 **Completion**
 - `chore` — FK
 - `completed_on` — date (defaults to today, editable for backdating)
+- `completed_by` — FK to household member
 - `created_at`
 
 Streaks and "due today" are **derived** from `Completion` rows, not stored. That means no

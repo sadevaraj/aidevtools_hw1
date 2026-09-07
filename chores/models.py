@@ -4,6 +4,18 @@ from django.db.models import Q
 from django.utils import timezone
 
 
+class HouseholdMember(models.Model):
+    name = models.CharField(max_length=80, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
 class Chore(models.Model):
     class RecurrenceType(models.TextChoices):
         DAILY = "daily", "Daily"
@@ -18,6 +30,12 @@ class Chore(models.Model):
     )
     weekly_target = models.PositiveSmallIntegerField(null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
+    assigned_to = models.ForeignKey(
+        HouseholdMember,
+        on_delete=models.PROTECT,
+        related_name="chores",
+        null=True,
+    )
     is_archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -51,6 +69,13 @@ class Chore(models.Model):
 class Completion(models.Model):
     chore = models.ForeignKey(Chore, on_delete=models.CASCADE, related_name="completions")
     completed_on = models.DateField(default=timezone.localdate)
+    completed_by = models.ForeignKey(
+        HouseholdMember,
+        on_delete=models.PROTECT,
+        related_name="completions",
+        null=True,
+        blank=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

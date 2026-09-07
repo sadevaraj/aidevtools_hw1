@@ -21,6 +21,7 @@
           <li>
             <strong>{{ card.chore.name }}</strong>
             ({{ card.chore.get_recurrence_type_display }})
+            — assigned to: {{ card.chore.assigned_to|default:"Unassigned" }}
             {% if card.status.is_due %} — due today{% endif %}
             {% if card.status.is_overdue %} — OVERDUE{% endif %}
             {% if card.status.weekly_progress is not None %}
@@ -32,6 +33,7 @@
               <form method="post" action="{% url 'chores:complete' card.chore.id %}" style="display:inline;">
                 {% csrf_token %}
                 {{ completion_form.completed_on }}
+                {{ completion_form.completed_by }}
                 <input type="hidden" name="next" value="{% url 'chores:list' %}" />
                 <button type="submit">Mark done</button>
               </form>
